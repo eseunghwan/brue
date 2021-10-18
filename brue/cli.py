@@ -18,10 +18,10 @@ def init_project(dest_directory:str):
     os.chdir(brython_dist)
     subprocess.call([ "echo", "N", "|", "brython-cli", "--install" ])
 
-    os.chdir(dest_directory)
-    subprocess.call([ sys.executable, "-m", "pip", "install", "virtualenv" ])
-    subprocess.call([ sys.executable, "-m", "virtualenv", os.path.join(dest_directory, "env") ])
-    subprocess.call([ os.path.join(__path__[0], "env", "Scripts" if sys.platform == "win32" else "bin", "python"), "-m", "pip", "install", "pip", "pylint", "brue", "--upgrade" ])
+    # os.chdir(dest_directory)
+    # subprocess.call([ sys.executable, "-m", "pip", "install", "virtualenv" ])
+    # subprocess.call([ sys.executable, "-m", "virtualenv", os.path.join(dest_directory, "env") ])
+    # subprocess.call([ os.path.join(__path__[0], "env", "Scripts" if sys.platform == "win32" else "bin", "python"), "-m", "pip", "install", "pip", "pylint", "brue", "--upgrade" ])
 
 def serve_project(host:str, port:int, run_http_server:bool = True, remove_temp:bool = True) -> str:
     project_root = os.getcwd()
