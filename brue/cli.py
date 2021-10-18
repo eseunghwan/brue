@@ -22,6 +22,7 @@ def init_project(dest_directory:str):
     os.chdir(dest_directory)
     subprocess.call([ sys.executable, "-m", "pip", "install", "virtualenv" ])
     subprocess.call([ sys.executable, "-m", "virtualenv", os.path.join(dest_directory, "env") ])
+    subprocess.call([ os.path.join(__path__[0], "env", "Scripts" if sys.platform == "win32" else "bin", "python"), "-m", "pip", "install", "brue" ])
 
 def serve_project(host:str, port:int, run_http_server:bool = True, remove_temp:bool = True) -> Tuple[str, str]:
     project_root = os.getcwd()
@@ -56,8 +57,6 @@ def serve_project(host:str, port:int, run_http_server:bool = True, remove_temp:b
         shutil.copyfile(os.path.join(__path__[0], "brython_files", file), os.path.join(serve_temp, file))
 
     env_bin = os.path.join(project_root, "env", "Scripts" if sys.platform == "win32" else "bin", "python")
-    subprocess.call([ env_bin, "-m", "pip", "install", "brython" ])
-
     if run_http_server:
         try:
             os.chdir(serve_temp)
