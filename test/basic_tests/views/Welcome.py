@@ -12,8 +12,9 @@ class Welcome(Component):
     }
 
     .splash {
-        width: 300px;
+        width: 100%;
         height: 300px;
+        max-width: 700px;
     }
 
     .title {
@@ -26,7 +27,7 @@ class Welcome(Component):
     """
     def render(self):
         with ColumnLayout(Class = "root"):
-            Image(src = "./assets/brython.png", Class = "splash")
+            Image(src = "./assets/splash.png", Class = "splash")
 
             Label("brue", Class = "title")
-            Label("MVVM UI Toolkit", Class = "subtitle")
+            Label("modern web gui using python", Class = "subtitle")

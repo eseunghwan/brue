@@ -30,4 +30,4 @@ class Welcome(Component):
             Image(src = "./assets/splash.png", Class = "splash")
 
             Label("brue", Class = "title")
-            Label("MVVM UI Toolkit", Class = "subtitle")
+            Label("modern web gui using python", Class = "subtitle")
