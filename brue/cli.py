@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os, sys, zipfile, subprocess, shutil
-from typing import Tuple
 from . import __path__
 
 
@@ -24,7 +23,7 @@ def init_project(dest_directory:str):
     subprocess.call([ sys.executable, "-m", "virtualenv", os.path.join(dest_directory, "env") ])
     subprocess.call([ os.path.join(__path__[0], "env", "Scripts" if sys.platform == "win32" else "bin", "python"), "-m", "pip", "install", "brue" ])
 
-def serve_project(host:str, port:int, run_http_server:bool = True, remove_temp:bool = True) -> Tuple[str, str]:
+def serve_project(host:str, port:int, run_http_server:bool = True, remove_temp:bool = True) -> str:
     project_root = os.getcwd()
     serve_temp = os.path.join(project_root, ".serve")
     if os.path.exists(serve_temp):
@@ -56,24 +55,23 @@ def serve_project(host:str, port:int, run_http_server:bool = True, remove_temp:b
     for file in ("brython.js", "brython_stdlib.js"):
         shutil.copyfile(os.path.join(__path__[0], "brython_files", file), os.path.join(serve_temp, file))
 
-    env_bin = os.path.join(project_root, "env", "Scripts" if sys.platform == "win32" else "bin", "python")
     if run_http_server:
         try:
             os.chdir(serve_temp)
-            subprocess.call([ env_bin, "-m", "http.server", str(port), "--bind", host ])
+            subprocess.call([ sys.executable, "-m", "http.server", str(port), "--bind", host ])
         except KeyboardInterrupt:
             pass
 
     if remove_temp:
         shutil.rmtree(serve_temp)
 
-    return env_bin, serve_temp
+    return serve_temp
 
 def build_project(dist_directory:str):
-    env_bin, serve_temp = serve_project("127.0.0.1", 8000, False, False)
+    serve_temp = serve_project("127.0.0.1", 8000, False, False)
 
     os.chdir(serve_temp)
-    subprocess.call([ env_bin, "-m", "brython", "--modules" ])
+    subprocess.call([ sys.executable, "-m", "brython", "--modules" ])
 
     with open(os.path.join(serve_temp, "brython.js"), encoding = "utf-8-sig") as br:
         with open(os.path.join(serve_temp, "brython_modules.js"), encoding = "utf-8-sig") as bmr:
