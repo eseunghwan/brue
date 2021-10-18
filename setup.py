@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-__version__ = "2021.10.18"
+__version__ = "2021.10.19"
 __author__ = "Lee Seung Hwan"
 __mail__ = "shlee0920@naver.com"
 
