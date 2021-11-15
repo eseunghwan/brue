@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-__version__ = "2021.10.19"
+__version__ = "2021.11.15"
 __author__ = "Lee Seung Hwan"
 __mail__ = "shlee0920@naver.com"
 
@@ -20,6 +20,7 @@ setup(
     version = __version__,
     python_requires = ">=3.7",
     install_requires = requires,
+    setup_requires = requires,
     entry_points = {
         "console_scripts": [
             "brue-cli=brue.cli:main"
@@ -30,10 +31,10 @@ setup(
     description = "modern web gui using python",
     long_description = readme,
     long_description_content_type = "text/markdown",
-    packages = [ "brue", "brue/ui", "brue/assets" ],
+    packages = [ "brue", "brue/assets" ],
     package_data = {
         "": [
-            "*.zip", "*.html"
+            "*.zip", "*.js"
         ]
     },
     include_package_data = True,

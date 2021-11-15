@@ -2,12 +2,16 @@
 from brue import brueElement
 from brue.decorators import defineElement
 
-@defineElement("view-welcome")
-class Welcome(brueElement):
+@defineElement("comp-hello")
+class Hello(brueElement):
+    props = {
+        "name": str
+    }
+
     def __init__(self):
         super().__init__()
 
     def render(self):
-        return """
-        <comp-hello name="eseunghwan"></comp-hello>
+        return f"""
+        <h3>Hello {self.props.name}!</h3>
         """

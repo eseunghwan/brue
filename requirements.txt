@@ -1,1 +1,3 @@
-brython
+javascripthon
+minify_html
+jsmin
