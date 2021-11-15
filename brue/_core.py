@@ -19,6 +19,7 @@ class brueRoute:
 class brueElement:
     state:dict = {}
     props:dict = {}
+    store:dict = {}
 
     def created(self):
         pass

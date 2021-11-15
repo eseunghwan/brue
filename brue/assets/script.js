@@ -141,6 +141,7 @@ class brueElement extends HTMLElement {
 
         this.created();
 
+        this.$focus_address = [];
         this.store = brue.store;
         this.$props = this.props == undefined ? {} : this.props;
         if (this.state == undefined) {
@@ -148,6 +149,47 @@ class brueElement extends HTMLElement {
         }
 
         this.attachShadow({ mode: "open" });
+    }
+
+    $get_focus_address(element) {
+        this.$focus_address.unshift(Array.prototype.indexOf.call(element.parentNode.children, element));
+
+        if (element.parentNode != this.shadowRoot) {
+            this.$get_focus_address(element.parentNode);
+        }
+    }
+
+    $get_from_model_names(model_names) {
+        var model = this;
+        for (var name of model_names) {
+            model = model[name];
+        }
+
+        return model;
+    }
+
+    $set_to_model_names(model_names, value) {
+        var model_value = this.$get_from_model_names(model_names);
+
+        if (typeof(model_value) == "number") {
+            if (model_value % 1 == 0) {
+                value = parseInt(value);
+            }
+            else {
+                value = parseFloat(value);
+            }
+        }
+        else if (typeof(model_value) == "string") {
+            value = `"${value}"`;
+        }
+        else {
+            try {
+                value = eval(value);
+            }
+            catch {}
+        }
+
+        eval(`this.${model_names.join(".")} = ${value}`);
     }
 
     $find_element_custom_attr(element) {
@@ -160,8 +202,15 @@ class brueElement extends HTMLElement {
             }
         }
 
+        Object.defineProperty(element, "root", {"value": this, "enumerable": false, "configurable": false, "writable": false});
+        element.addEventListener("focus", (ev) => {
+            ev.target.root.$focus_address = [];
+            ev.target.root.$get_focus_address(ev.target);
+        });
+
         if (has_custom_attr) {
             this.$connect_event(element);
+            this.$connect_model(element);
         }
 
         for (var child of element.children) {
@@ -171,13 +220,37 @@ class brueElement extends HTMLElement {
 
     $connect_event(element) {
         var self = this;
-
         for (var idx = 0; idx < element.attributes.length; idx++) {
             var key = element.attributes[idx].name;
-            if (key.startsWith(":")) {
+            if (key.startsWith(":on-")) {
                 var func = eval(element.attributes[idx].value);
                 element.removeAttribute(key);
-                element.addEventListener(key.substring(1), func.bind(this));
+                element.addEventListener(key.substring(4), func.bind(this));
+            }
+        }
+    }
+
+    $connect_model(element) {
+        var self = this;
+        for (var idx = 0; idx < element.attributes.length; idx++) {
+            var key = element.attributes[idx].name;
+            if (key == ":model") {
+                var model_name = element.attributes[idx].value;
+                var model_names = [];
+                if (model_name.startsWith("self.")) {
+                    model_names = model_name.substring(5).split(".");
+                }
+                else {
+                    model_names = model_name.split(".");
+                }
+
+                element.removeAttribute(key);
+                element.value = this.$get_from_model_names(model_names);
+
+                Object.defineProperty(element, "model_names", {"value": model_names, "enumerable": false, "configurable": false, "writable": false});
+                element.addEventListener("change", (ev) => {
+                    ev.target.root.$set_to_model_names(ev.target.model_names, ev.target.value);
+                });
             }
         }
     }
@@ -223,6 +296,15 @@ class brueElement extends HTMLElement {
             this.shadowRoot.appendChild(style_elm);
         }
         this.$find_element_custom_attr(this.shadowRoot.firstElementChild);
+
+        var focus_elm = this.shadowRoot;
+        for (var address of this.$focus_address) {
+            focus_elm = focus_elm.children[address];
+        }
+
+        if (focus_elm != this.shadowRoot) {
+            focus_elm.focus();
+        }
     }
 
     created() {}

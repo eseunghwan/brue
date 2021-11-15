@@ -25,6 +25,9 @@ def build_project(build_dir:str, verbose:bool, minify_output:bool = True):
     with open(os.path.join(__path__[0], "assets", "script.js"), "r", encoding = "utf-8-sig") as sfr:
         script_text = sfr.read()
 
+    if verbose:
+        print("copying public files...")
+
     for file in glob(os.path.join(source_dir, "public", "*.*")):
         file_name = os.path.basename(file)
         if file_name == "index.html":
@@ -35,18 +38,35 @@ def build_project(build_dir:str, verbose:bool, minify_output:bool = True):
 
     asset_dir = os.path.join(source_dir, "assets")
     if os.path.exists(asset_dir):
+        if verbose:
+            print("\ncopying asset files...")
+
         shutil.copytree(asset_dir, os.path.join(build_dir, "assets"))
 
+    if verbose:
+        print("\ncompiling component files...")
+
     script_text += transpile_directory(os.path.join(source_dir, "components", "[!_]*.py"), build_dir, verbose = verbose)
+
+    if verbose:
+        print("\ncompiling view files...")
+
     script_text += transpile_directory(os.path.join(source_dir, "views", "[!_]*.py"), build_dir, remove_settings = True, verbose = verbose)
 
     store_file = os.path.join(source_dir, "store.py")
     if os.path.exists(store_file):
+        if verbose:
+            print("\ncompiling store file...")
         script_text += transpile(store_file, os.path.join(build_dir, "store.js"), remove_settings = True, remove_dest = True, verbose = verbose)
 
     route_file = os.path.join(source_dir, "routes.py")
     if os.path.exists(route_file):
+        if verbose:
+            print("\ncompiling route file...")
         script_text += transpile(route_file, os.path.join(build_dir, "routes.js"), remove_settings = True, remove_dest = True, verbose = verbose)
+
+    if verbose:
+        print("\ncompiling App files...")
 
     script_text += transpile(os.path.join(source_dir, "main.py"), os.path.join(build_dir, "main.js"), remove_settings = True, remove_dest = True, verbose = verbose)
     script_text += transpile(os.path.join(source_dir, "App.py"), os.path.join(build_dir, "App.js"), remove_settings = True, remove_dest = True, verbose = verbose)
@@ -59,10 +79,13 @@ def build_project(build_dir:str, verbose:bool, minify_output:bool = True):
         sfw.write(jsmin.jsmin(script_text))
     else:
         ifw.write(index_html)
-        ifw.write(script_text)
+        sfw.write(script_text)
 
     ifw.close()
     sfw.close()
+
+    if verbose:
+        print(f"build finished in {build_dir}")
 
 def run_cli():
     args = vars(parser.parse_args())
@@ -73,12 +96,14 @@ def run_cli():
         if not os.path.exists(init_dir):
             os.mkdir(init_dir)
 
+        print("extracting files...")
         template_zip.extractall(init_dir)
         template_zip.close()
+        print(f"brue project initialized in {init_dir}\n")
     elif args["serve_port"]:
         host, port = "0.0.0.0", args["serve_port"]
         serve_dir = os.path.realpath("./.serve")
-        build_project(serve_dir, False)
+        build_project(serve_dir, False, False)
         os.chdir(serve_dir)
         try:
             os.system(f"{sys.executable} -m http.server {port} --bind {host}")

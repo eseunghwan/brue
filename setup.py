@@ -23,7 +23,7 @@ setup(
     setup_requires = requires,
     entry_points = {
         "console_scripts": [
-            "brue-cli=brue.cli:main"
+            "brue-cli=brue.__main__:run_cli"
         ]
     },
     name = "brue",
