@@ -108,7 +108,7 @@ def init_project(args):
 def serve_project(args):
     config = read_config()["serve"]
 
-    host, port = "0.0.0.0", config["port"] if args["port"] is None else args["serve_port"]
+    host, port = "0.0.0.0", config["port"] if args["port"] is None else args["port"]
     serve_dir = os.path.realpath("./.serve")
     build_project_raw(serve_dir, False, False)
     os.chdir(serve_dir)
@@ -122,7 +122,7 @@ def serve_project(args):
 def build_project(args):
     config = read_config()["build"]
 
-    build_dir = config["target"] if args["target"] is None else args["build_dir"]
+    build_dir = config["target"] if args["target"] is None else args["target"]
     build_project_raw(os.path.realpath(build_dir), True)
 
 

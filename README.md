@@ -23,7 +23,7 @@ pip3 install https://github.com/eseunghwan/brue.git
 # Cli
 ### create project with cli
 ```powershell
-brue-cli init [dest(default = "./")]
+brue-cli init --target=[dest(default = "./")]
 
 // example
 brue-cli init ./test2
@@ -35,7 +35,7 @@ brue project initialized in [dest]
 
 ### run with server
 ```powershell
-brue-cli serve [port(default = 8080)]
+brue-cli serve --port=[port(default = 8080)]
 
 // example
 brue-cli --serve 8080
@@ -46,7 +46,7 @@ Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
 
 ### build project file to standalone .html and .js
 ```powershell
-brue-cli build [dest(default = "./build")]
+brue-cli build --target=[dest(default = "./build")]
 
 // example
 brue-cli --build ./build
