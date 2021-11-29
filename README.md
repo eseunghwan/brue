@@ -21,10 +21,10 @@ pip3 install https://github.com/eseunghwan/brue.git
 # Cli
 ### create project with cli
 ```powershell
-brue-cli --init [dest]
+brue-cli init [dest(default = "./")]
 
 // example
-brue-cli --init ./test2
+brue-cli init ./test2
 [output]
 extracting files...
 brue project initialized in [dest]
@@ -33,7 +33,7 @@ brue project initialized in [dest]
 
 ### run with server
 ```powershell
-brue-cli --serve [port]
+brue-cli serve [port(default = 8080)]
 
 // example
 brue-cli --serve 8080
@@ -44,7 +44,7 @@ Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/) ...
 
 ### build project file to standalone .html and .js
 ```powershell
-brue-cli --build [dest]
+brue-cli build [dest(default = "./build")]
 
 // example
 brue-cli --build ./build
@@ -86,6 +86,23 @@ class App(brueElement):
             <router-view />
         </div>
         """
+```
+<br>
+
+### condition(if)
+```python
+...
+state = {
+    "is_flag": True
+}
+{ "flag!" if self.state.is_flag else "not flag!" }
+...
+
+[expected output]
+<if is_flag>
+flag!
+<else>
+not flag!
 ```
 <br>
 

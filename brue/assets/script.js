@@ -103,7 +103,6 @@ function repeat(iterable, iter_method) {
 
 // core classes
 var brue = {
-    $route_view: null,
     routes: {},
     store: {},
     use(cls) {
@@ -141,6 +140,7 @@ class brueElement extends HTMLElement {
 
         this.created();
 
+        this.$route_view = null;
         this.$focus_address = [];
         this.store = brue.store;
         this.$props = this.props == undefined ? {} : this.props;
@@ -203,6 +203,9 @@ class brueElement extends HTMLElement {
         }
 
         Object.defineProperty(element, "root", {"value": this, "enumerable": false, "configurable": false, "writable": false});
+        if (element.tagName == "ROUTER-VIEW") {
+            this.$route_view = element;
+        }
         element.addEventListener("focus", (ev) => {
             ev.target.root.$focus_address = [];
             ev.target.root.$get_focus_address(ev.target);
@@ -333,7 +336,7 @@ class RouterLink extends HTMLElement {
         link.href = "#";
         link.innerText = this.firstChild.nodeValue;
         link.addEventListener("click", (ev) => {
-            brue.$route_view.change_view(this.$url);
+            this.root.$route_view.change_view(this.$url);
         })
         this.shadowRoot.appendChild(link);
         this.removeChild(this.firstChild);
@@ -345,7 +348,6 @@ class RouterView extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
-        brue.$route_view = this;
     }
 
     connectedCallback() {
