@@ -1,9 +1,9 @@
-<center>
+<p style="text-align:center;">
 <img src="https://raw.githubusercontent.com/eseunghwan/brue/master/test/basic/assets/splash.png" width="200px" height="200px" title="brue_logo"></img><br>
 <font size="7">brue</font><br>
 <a href="https://pypi.python.org/pypi/brue"><image src="https://img.shields.io/pypi/v/brue.svg" /></a><hr>
 <font size="4">write in python, transpile to js, run in browser</font>
-</center>
+</p>
 <br><br><br><br><br><br>
 
 
