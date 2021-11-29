@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from setuptools import setup
-
-__version__ = "2021.11.15"
-__author__ = "Lee Seung Hwan"
-__mail__ = "shlee0920@naver.com"
+from brue import __author__, __mail__, __version__
 
 with open("requirements.txt", "r", encoding = "utf-8-sig") as reqr:
     requires = reqr.read().split("\n")

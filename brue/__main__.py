@@ -1,21 +1,28 @@
 # -*- coding: utf-8 -*-
-import os, sys, argparse, shutil, minify_html, jsmin, zipfile
+import os, sys, argparse, json, shutil, minify_html, jsmin, zipfile
 from glob import glob
 from ._utils import transpile_directory, transpile
 from . import __path__
 
 
-parser = argparse.ArgumentParser(
-    description = "cli for brue executions",
-    prog = "brue-cli"
-)
+def read_config() -> dict:
+    if os.path.exists(os.path.join(os.getcwd(), "config.json")):
+        with open(os.path.join(os.getcwd(), "config.json"), "r", encoding = "utf-8-sig") as cr:
+            config = json.load(cr)
+    else:
+        config = {
+            "build": {
+                "target": "./build"
+            },
+            "serve": {
+                "port": 8080
+            }
+        }
 
-parser.add_argument("--init", dest = "init_dir", default = False)
-parser.add_argument("--serve", type = int, dest = "serve_port", default = False)
-parser.add_argument("--build", dest = "build_dir", default = False)
+    return config
 
-
-def build_project(build_dir:str, verbose:bool, minify_output:bool = True):
+# functions
+def build_project_raw(build_dir:str, verbose:bool, minify_output:bool = True):
     source_dir = os.getcwd()
     if os.path.exists(build_dir):
         shutil.rmtree(build_dir)
@@ -87,32 +94,59 @@ def build_project(build_dir:str, verbose:bool, minify_output:bool = True):
     if verbose:
         print(f"build finished in {build_dir}")
 
+def init_project(args):
+    init_dir = os.path.realpath(args["target"])
+    template_zip = zipfile.ZipFile(os.path.join(__path__[0], "assets", "template.zip"))
+    if not os.path.exists(init_dir):
+        os.mkdir(init_dir)
+
+    print("extracting files...")
+    template_zip.extractall(init_dir)
+    template_zip.close()
+    print(f"brue project initialized in {init_dir}\n")
+
+def serve_project(args):
+    config = read_config()["serve"]
+
+    host, port = "0.0.0.0", config["port"] if args["port"] is None else args["serve_port"]
+    serve_dir = os.path.realpath("./.serve")
+    build_project_raw(serve_dir, False, False)
+    os.chdir(serve_dir)
+    try:
+        os.system(f"{sys.executable} -m http.server {port} --bind {host}")
+    except KeyboardInterrupt:
+        pass
+
+    shutil.rmtree(serve_dir)
+
+def build_project(args):
+    config = read_config()["build"]
+
+    build_dir = config["target"] if args["target"] is None else args["build_dir"]
+    build_project_raw(os.path.realpath(build_dir), True)
+
+
+parser = argparse.ArgumentParser(
+    description = "cli for brue executions",
+    prog = "brue-cli"
+)
+sparser = parser.add_subparsers()
+
+init_parser = sparser.add_parser("init")
+init_parser.add_argument("--target", default = "./")
+init_parser.set_defaults(func = init_project)
+
+serve_parser = sparser.add_parser("serve")
+serve_parser.add_argument("--port", default = None)
+serve_parser.set_defaults(func = serve_project)
+
+build_parser = sparser.add_parser("build")
+build_parser.add_argument("--target", default = None)
+build_parser.set_defaults(func = build_project)
+
 def run_cli():
-    args = vars(parser.parse_args())
-
-    if args["init_dir"]:
-        init_dir = os.path.realpath(args["init_dir"])
-        template_zip = zipfile.ZipFile(os.path.join(__path__[0], "assets", "template.zip"))
-        if not os.path.exists(init_dir):
-            os.mkdir(init_dir)
-
-        print("extracting files...")
-        template_zip.extractall(init_dir)
-        template_zip.close()
-        print(f"brue project initialized in {init_dir}\n")
-    elif args["serve_port"]:
-        host, port = "0.0.0.0", args["serve_port"]
-        serve_dir = os.path.realpath("./.serve")
-        build_project(serve_dir, False, False)
-        os.chdir(serve_dir)
-        try:
-            os.system(f"{sys.executable} -m http.server {port} --bind {host}")
-        except KeyboardInterrupt:
-            pass
-
-        shutil.rmtree(serve_dir)
-    elif args["build_dir"]:
-        build_project(os.path.realpath(args["build_dir"]), True)
+    args = parser.parse_args()
+    args.func(vars(args))
 
 
 if __name__ == "__main__":

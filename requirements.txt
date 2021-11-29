@@ -1,3 +1,4 @@
+click
 javascripthon
 minify_html
 jsmin

@@ -1,0 +1,8 @@
+{
+    "build": {
+        "target": "./build"
+    },
+    "serve": {
+        "port": 8080
+    }
+}
