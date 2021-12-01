@@ -20,6 +20,7 @@ class brueElement:
     state:dict = {}
     props:dict = {}
     store:dict = {}
+    refs:dict = {}
 
     def created(self):
         pass

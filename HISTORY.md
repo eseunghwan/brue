@@ -7,3 +7,8 @@
 - change cli commands(remove optional[--] tag)
 - change routerview from global to component-base(multiple routerview)
 - add config
+
+<br><br>
+
+[ version 2021.12.01 ]
+- add ref attribute to element

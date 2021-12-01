@@ -147,6 +147,7 @@ class brueElement extends HTMLElement {
         if (this.state == undefined) {
             this.state = {};
         }
+        this.refs = {};
 
         this.attachShadow({ mode: "open" });
     }
@@ -212,6 +213,11 @@ class brueElement extends HTMLElement {
         });
 
         if (has_custom_attr) {
+            if (element.hasAttribute("ref")) {
+                this.refs[element.getAttribute("ref")] = element;
+                element.removeAttribute("ref");
+            }
+
             this.$connect_event(element);
             this.$connect_model(element);
         }
