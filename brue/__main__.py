@@ -76,7 +76,7 @@ def build_project_raw(build_dir:str, verbose:bool, minify_output:bool = True):
         print("\ncompiling App files...")
 
     script_text += transpile(os.path.join(source_dir, "main.py"), os.path.join(build_dir, "main.js"), remove_settings = True, remove_dest = True, verbose = verbose)
-    script_text += transpile(os.path.join(source_dir, "App.py"), os.path.join(build_dir, "App.js"), remove_settings = True, remove_dest = True, verbose = verbose)
+    script_text += transpile(os.path.join(source_dir, "App.py"), os.path.join(build_dir, "App.js"), remove_settings = True, remove_dest = True, search_css = True, verbose = verbose)
 
     ifw = open(os.path.join(build_dir, "index.html"), "w", encoding = "utf-8-sig")
     sfw = open(os.path.join(build_dir, "script.js"), "w", encoding = "utf-8-sig")
