@@ -53,12 +53,12 @@ def build_project_raw(build_dir:str, verbose:bool, minify_output:bool = True):
     if verbose:
         print("\ncompiling component files...")
 
-    script_text += transpile_directory(os.path.join(source_dir, "components", "[!_]*.py"), build_dir, verbose = verbose)
+    script_text += transpile_directory(os.path.join(source_dir, "components", "**", "[!_]*.py"), build_dir, verbose = verbose)
 
     if verbose:
         print("\ncompiling view files...")
 
-    script_text += transpile_directory(os.path.join(source_dir, "views", "[!_]*.py"), build_dir, remove_settings = True, verbose = verbose)
+    script_text += transpile_directory(os.path.join(source_dir, "views", "**", "[!_]*.py"), build_dir, remove_settings = True, verbose = verbose)
 
     store_file = os.path.join(source_dir, "store.py")
     if os.path.exists(store_file):

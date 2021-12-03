@@ -12,3 +12,8 @@
 
 [ version 2021.12.01 ]
 - add ref attribute to element
+
+<br><br>
+
+[ version 2021.12.03 ]
+- support recursive tranpile in cli
