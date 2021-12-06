@@ -22,3 +22,4 @@
 
 [ versioin 2021.12.06 ]
 - bug fix for "2021.12.03"
+- append style tag before render result

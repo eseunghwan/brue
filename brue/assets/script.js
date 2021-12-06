@@ -296,7 +296,8 @@ class brueElement extends HTMLElement {
     }
 
     $update() {
-        this.shadowRoot.innerHTML = this.render();
+        this.shadowRoot.innerHTML = ""
+
         if (this.constructor.css_string != undefined) {
             var style_elm = document.createElement("style");
             style_elm.setAttribute("type", "text/css");
@@ -304,6 +305,8 @@ class brueElement extends HTMLElement {
 
             this.shadowRoot.appendChild(style_elm);
         }
+
+        this.shadowRoot.innerHTML += this.render();
         this.$find_element_custom_attr(this.shadowRoot.firstElementChild);
 
         var focus_elm = this.shadowRoot;
@@ -371,4 +374,3 @@ class RouterView extends HTMLElement {
     }
 }
 window.customElements.define("router-view", RouterView);
-

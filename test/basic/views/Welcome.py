@@ -9,5 +9,7 @@ class Welcome(brueElement):
 
     def render(self):
         return """
-        <comp-hello name="eseunghwan"></comp-hello>
+        <comp-hello name="eseunghwan">
+            <button>click me!</button>
+        </comp-hello>
         """

@@ -13,5 +13,8 @@ class Hello(brueElement):
 
     def render(self):
         return f"""
-        <h3>Hello {self.props.name}!</h3>
+        <h3>
+            Hello {self.props.name}!
+            <slot></slot>
+        </h3>
         """
