@@ -43,7 +43,12 @@ def transpile(source:str, dest:str, remove_settings:bool = False, remove_dest:bo
 
 def transpile_directory(source_patterns:str, dest_dir:str, ext:str = "js", merge_file:str = None, remove_settings:bool = False, verbose:bool = False):
     texts = []
-    for idx, file in enumerate(glob(source_patterns, recursive = True)):
+
+    dir_pattern = os.path.dirname(source_patterns)
+    file_pattern = os.path.basename(source_patterns)
+
+    files_to_transpile = glob(source_patterns) + glob(os.path.join(dir_pattern, "**", file_pattern))
+    for idx, file in enumerate(files_to_transpile):
         file_name = os.path.splitext(os.path.basename(file))[0]
         texts.append(transpile(file, os.path.join(dest_dir, f"{file_name}.{ext}"), remove_settings = (not idx == 0 or remove_settings), remove_dest = merge_file is None, search_css = True, verbose = verbose))
 
