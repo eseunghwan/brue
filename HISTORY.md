@@ -17,3 +17,8 @@
 
 [ version 2021.12.03 ]
 - support recursive tranpile in cli
+
+<br><br>
+
+[ versioin 2021.12.06 ]
+- bug fix for "2021.12.03"
