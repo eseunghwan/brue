@@ -58,25 +58,25 @@ def build_project_raw(build_dir:str, verbose:bool, minify_output:bool = True):
     if verbose:
         print("\ncompiling view files...")
 
-    script_text += transpile_directory(os.path.join(source_dir, "views", "[!_]*.py"), build_dir, remove_settings = True, verbose = verbose)
+    script_text += transpile_directory(os.path.join(source_dir, "views", "[!_]*.py"), build_dir, verbose = verbose)
 
     store_file = os.path.join(source_dir, "store.py")
     if os.path.exists(store_file):
         if verbose:
             print("\ncompiling store file...")
-        script_text += transpile(store_file, os.path.join(build_dir, "store.js"), remove_settings = True, remove_dest = True, verbose = verbose)
+        script_text += transpile(store_file, os.path.join(build_dir, "store.js"), remove_dest = True, verbose = verbose)
 
     route_file = os.path.join(source_dir, "routes.py")
     if os.path.exists(route_file):
         if verbose:
             print("\ncompiling route file...")
-        script_text += transpile(route_file, os.path.join(build_dir, "routes.js"), remove_settings = True, remove_dest = True, verbose = verbose)
+        script_text += transpile(route_file, os.path.join(build_dir, "routes.js"), remove_dest = True, verbose = verbose)
 
     if verbose:
         print("\ncompiling App files...")
 
-    script_text += transpile(os.path.join(source_dir, "main.py"), os.path.join(build_dir, "main.js"), remove_settings = True, remove_dest = True, verbose = verbose)
-    script_text += transpile(os.path.join(source_dir, "App.py"), os.path.join(build_dir, "App.js"), remove_settings = True, remove_dest = True, search_css = True, verbose = verbose)
+    script_text += transpile(os.path.join(source_dir, "main.py"), os.path.join(build_dir, "main.js"), remove_dest = True, verbose = verbose)
+    script_text += transpile(os.path.join(source_dir, "App.py"), os.path.join(build_dir, "App.js"), remove_dest = True, search_css = True, verbose = verbose)
 
     ifw = open(os.path.join(build_dir, "index.html"), "w", encoding = "utf-8-sig")
     sfw = open(os.path.join(build_dir, "script.js"), "w", encoding = "utf-8-sig")

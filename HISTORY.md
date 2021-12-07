@@ -28,3 +28,4 @@
 
 [ version 2021.12.07 ]
 - support custom tags(starts with :) to brueElement objects
+- add javascripthon snippet scripts to script.js file

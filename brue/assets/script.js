@@ -1,4 +1,35 @@
 
+// javascripthon snippets
+var _pj;
+function _pj_snippets(container) {
+    function set_class_decorators(cls, decos) {
+        function reducer(val, deco) {
+            return deco(val, cls);
+        }
+        return decos.reduce(reducer, cls);
+    }
+    function set_properties(cls, props) {
+        var desc, value;
+        var _pj_a = props;
+        for (var p in _pj_a) {
+            if (_pj_a.hasOwnProperty(p)) {
+                value = props[p];
+                if (((((! ((value instanceof Map) || (value instanceof WeakMap))) && (value instanceof Object)) && ("get" in value)) && (value.get instanceof Function))) {
+                    desc = value;
+                } else {
+                    desc = {"value": value, "enumerable": false, "configurable": true, "writable": true};
+                }
+                Object.defineProperty(cls.prototype, p, desc);
+            }
+        }
+    }
+    container["set_class_decorators"] = set_class_decorators;
+    container["set_properties"] = set_properties;
+    return container;
+}
+_pj = {};
+_pj_snippets(_pj);
+
 // base functions(like python)
 function enumerate(source) {
     var enums = [];
