@@ -154,6 +154,10 @@ class brueElement extends HTMLElement {
         this.attachShadow({ mode: "open" });
     }
 
+    $as_property() {
+        return { "value": this, "enumerable": false, "configurable": false, "writable": false };
+    }
+
     $get_focus_address(element) {
         this.$focus_address.unshift(Array.prototype.indexOf.call(element.parentNode.children, element));
 
@@ -205,7 +209,11 @@ class brueElement extends HTMLElement {
             }
         }
 
-        Object.defineProperty(element, "root", {"value": this, "enumerable": false, "configurable": false, "writable": false});
+        Object.defineProperty(element, "root", this.$as_property());
+        if (element.tagName.includes("-")) {
+            Object.defineProperty(element, "app", this.$as_property());
+        }
+
         if (element.tagName == "ROUTER-VIEW") {
             this.$route_view = element;
         }
@@ -279,7 +287,7 @@ class brueElement extends HTMLElement {
         for (var idx = 0; idx < this.attributes.length; idx++) {
             var key = this.attributes[idx].name;
             if (key.startsWith(":")) {
-                custom_tags[key] = this.getAttribute(key).replace("self.", "self.root.");
+                custom_tags[key] = this.getAttribute(key).replace("self.", "self.app.");
             }
         }
         this.custom_tags = custom_tags;
