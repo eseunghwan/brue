@@ -211,7 +211,7 @@ class brueElement extends HTMLElement {
 
         Object.defineProperty(element, "root", this.$as_property());
         if (element.tagName.includes("-")) {
-            Object.defineProperty(element, "app", this.$as_property());
+            Object.defineProperty(element.constructor, "app", this.$as_property());
         }
 
         if (element.tagName == "ROUTER-VIEW") {
@@ -244,10 +244,11 @@ class brueElement extends HTMLElement {
             if (key.startsWith(":on-")) {
                 try {
                     var func = eval(element.attributes[idx].value);
-                    element.removeAttribute(key);
                     element.addEventListener(key.substring(4), func.bind(this));
                 }
                 catch {}
+
+                element.removeAttribute(key);
             }
         }
     }
@@ -287,7 +288,7 @@ class brueElement extends HTMLElement {
         for (var idx = 0; idx < this.attributes.length; idx++) {
             var key = this.attributes[idx].name;
             if (key.startsWith(":")) {
-                custom_tags[key] = this.getAttribute(key).replace("self.", "self.app.");
+                custom_tags[key] = this.getAttribute(key).replace("self.", "self.constructor.app.");
             }
         }
         this.custom_tags = custom_tags;
