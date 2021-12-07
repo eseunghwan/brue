@@ -312,6 +312,9 @@ class brueElement extends HTMLElement {
     }
 
     $update() {
+        this.root = brue.$current_element;
+        brue.$current_element = this;
+
         this.shadowRoot.innerHTML = ""
 
         if (this.constructor.css_string != undefined) {
@@ -325,10 +328,8 @@ class brueElement extends HTMLElement {
         this.shadowRoot.innerHTML += this.render();
         for (var key in this.custom_tags) {
             this.shadowRoot.firstElementChild.setAttribute(key, this.custom_tags[key]);
+            this.removeAttribute(key);
         }
-
-        this.root = brue.$current_element;
-        brue.$current_element = this;
 
         this.$find_element_custom_attr(this.shadowRoot.firstElementChild);
 
