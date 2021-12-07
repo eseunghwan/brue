@@ -327,11 +327,11 @@ class brueElement extends HTMLElement {
 
         this.shadowRoot.innerHTML += this.render();
         for (var key in this.custom_tags) {
-            this.shadowRoot.firstElementChild.setAttribute(key, this.custom_tags[key]);
+            this.shadowRoot.children[1].setAttribute(key, this.custom_tags[key]);
             this.removeAttribute(key);
         }
 
-        this.$find_element_custom_attr(this.shadowRoot.firstElementChild);
+        this.$find_element_custom_attr(this.shadowRoot.children[1]);
 
         var focus_elm = this.shadowRoot;
         for (var address of this.$focus_address) {
