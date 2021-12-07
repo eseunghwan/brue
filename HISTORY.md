@@ -23,3 +23,8 @@
 [ versioin 2021.12.06 ]
 - bug fix for "2021.12.03"
 - append style tag before render result
+
+<br><br>
+
+[ version 2021.12.07 ]
+- support custom tags(starts with :) to brueElement objects

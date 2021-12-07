@@ -103,6 +103,7 @@ function repeat(iterable, iter_method) {
 
 // core classes
 var brue = {
+    $current_element: null,
     routes: {},
     store: {},
     use(cls) {
@@ -148,6 +149,7 @@ class brueElement extends HTMLElement {
             this.state = {};
         }
         this.refs = {};
+        this.custom_tags = {};
 
         this.attachShadow({ mode: "open" });
     }
@@ -232,9 +234,12 @@ class brueElement extends HTMLElement {
         for (var idx = 0; idx < element.attributes.length; idx++) {
             var key = element.attributes[idx].name;
             if (key.startsWith(":on-")) {
-                var func = eval(element.attributes[idx].value);
-                element.removeAttribute(key);
-                element.addEventListener(key.substring(4), func.bind(this));
+                try {
+                    var func = eval(element.attributes[idx].value);
+                    element.removeAttribute(key);
+                    element.addEventListener(key.substring(4), func.bind(this));
+                }
+                catch {}
             }
         }
     }
@@ -269,9 +274,20 @@ class brueElement extends HTMLElement {
 
         var self = this;
         var props = {}, state = {};
+        var custom_tags = {};
+
+        for (var idx = 0; idx < this.attributes.length; idx++) {
+            var key = this.attributes[idx].name;
+            if (key.startsWith(":")) {
+                custom_tags[key] = this.getAttribute(key).replace("self.", "self.root.");
+            }
+        }
+        this.custom_tags = custom_tags;
+
         for (var key in this.$props) {
             if (this.hasAttribute(key)) {
                 props[key] = this.getAttribute(key);
+                this.removeAttribute(key);
             }
         }
         this.props = props;
@@ -307,6 +323,13 @@ class brueElement extends HTMLElement {
         }
 
         this.shadowRoot.innerHTML += this.render();
+        for (var key in this.custom_tags) {
+            this.shadowRoot.firstElementChild.setAttribute(key, this.custom_tags[key]);
+        }
+
+        this.root = brue.$current_element;
+        brue.$current_element = this;
+
         this.$find_element_custom_attr(this.shadowRoot.firstElementChild);
 
         var focus_elm = this.shadowRoot;
