@@ -211,10 +211,6 @@ class brueElement extends HTMLElement {
         }
 
         Object.defineProperty(element, "root", this.$as_property());
-        if (element.tagName.includes("-")) {
-            // console.log(element, brue.$current_app_element);
-        }
-
         if (element.tagName == "ROUTER-VIEW") {
             this.$route_view = element;
         }
@@ -243,7 +239,6 @@ class brueElement extends HTMLElement {
         for (var idx = 0; idx < element.attributes.length; idx++) {
             var key = element.attributes[idx].name;
             if (key.startsWith(":on-")) {
-                console.log(brue.$current_app_element);
                 try {
                     var func = eval(element.attributes[idx].value);
                     element.addEventListener(key.substring(4), func.bind(this));
