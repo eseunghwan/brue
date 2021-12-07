@@ -103,6 +103,7 @@ function repeat(iterable, iter_method) {
 
 // core classes
 var brue = {
+    $current_app_element: null,
     $current_element: null,
     routes: {},
     store: {},
@@ -211,7 +212,7 @@ class brueElement extends HTMLElement {
 
         Object.defineProperty(element, "root", this.$as_property());
         if (element.tagName.includes("-")) {
-            Object.defineProperty(element.constructor, "app", this.$as_property());
+            // console.log(element, brue.$current_app_element);
         }
 
         if (element.tagName == "ROUTER-VIEW") {
@@ -242,6 +243,7 @@ class brueElement extends HTMLElement {
         for (var idx = 0; idx < element.attributes.length; idx++) {
             var key = element.attributes[idx].name;
             if (key.startsWith(":on-")) {
+                console.log(brue.$current_app_element);
                 try {
                     var func = eval(element.attributes[idx].value);
                     element.addEventListener(key.substring(4), func.bind(this));
@@ -288,7 +290,7 @@ class brueElement extends HTMLElement {
         for (var idx = 0; idx < this.attributes.length; idx++) {
             var key = this.attributes[idx].name;
             if (key.startsWith(":")) {
-                custom_tags[key] = this.getAttribute(key).replace("self.", "self.constructor.app.");
+                custom_tags[key] = this.getAttribute(key).replace("self.", "self.app.");
             }
         }
         this.custom_tags = custom_tags;
@@ -321,11 +323,17 @@ class brueElement extends HTMLElement {
     }
 
     $update() {
+        if (brue.$current_app_element == null) {
+            brue.$current_app_element = this;
+        }
+        else {
+            this.app = brue.$current_app_element;
+        }
+
         this.root = brue.$current_element;
         brue.$current_element = this;
 
         this.shadowRoot.innerHTML = ""
-
         if (this.constructor.css_string != undefined) {
             var style_elm = document.createElement("style");
             style_elm.setAttribute("type", "text/css");
@@ -349,6 +357,10 @@ class brueElement extends HTMLElement {
 
         if (focus_elm != this.shadowRoot) {
             focus_elm.focus();
+        }
+
+        if (brue.$current_app_element.tagName == this.tagName) {
+            brue.$current_app_element = null;
         }
     }
 
