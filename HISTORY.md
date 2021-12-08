@@ -35,3 +35,4 @@
 
 [ version 2021.12.08 ]
 - bug fixes
+- add javascript reserved-words
