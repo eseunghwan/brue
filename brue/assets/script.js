@@ -177,9 +177,30 @@ class brueElement extends HTMLElement {
         this.$focus_address = [];
         this.store = brue.store;
         this.$props = this.props == undefined ? {} : this.props;
-        if (this.state == undefined) {
-            this.state = {};
+
+        var self = this, state = {};
+        for (var key in this.state) {
+            state[key] = this.state[key];
         }
+
+        this.state = new Proxy(state, {
+            get(t, n, r) {
+                return Reflect.get(t, n, r);
+            },
+            set(t, n, r) {
+                var res = Reflect.set(t, n, r);
+
+                if (self.app == undefined) {
+                    self.$update();
+                }
+                else {
+                    self.app.$update();
+                }
+
+                return res;
+            }
+        });
+
         this.refs = {};
         this.custom_tags = {};
 
@@ -309,8 +330,7 @@ class brueElement extends HTMLElement {
     connectedCallback() {
         this.mounted();
 
-        var self = this;
-        var props = {}, state = {};
+        var props = {}
         var custom_tags = {};
 
         for (var idx = 0; idx < this.attributes.length; idx++) {
@@ -328,28 +348,6 @@ class brueElement extends HTMLElement {
             }
         }
         this.props = props;
-
-        for (var key in this.state) {
-            state[key] = this.state[key];
-        }
-
-        this.state = new Proxy(state, {
-            get(t, n, r) {
-                return Reflect.get(t, n, r);
-            },
-            set(t, n, r) {
-                var res = Reflect.set(t, n, r);
-
-                if (self.app == undefined) {
-                    self.$update();
-                }
-                else {
-                    self.app.$update();
-                }
-
-                return res;
-            }
-        });
 
         this.$update();
     }
