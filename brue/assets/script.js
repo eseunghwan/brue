@@ -299,7 +299,13 @@ class brueElement extends HTMLElement {
                         binder = this.app;
                     }
 
-                    element.addEventListener(key.substring(4), func.bind(binder));
+                    element.addEventListener(
+                        key.substring(4),
+                        function() {
+                            func.call(binder);
+                            self.$update();
+                        }
+                    );
                 }
                 catch {}
 
