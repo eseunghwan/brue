@@ -292,8 +292,14 @@ class brueElement extends HTMLElement {
             var key = element.attributes[idx].name;
             if (key.startsWith(":on-")) {
                 try {
-                    var func = eval(element.attributes[idx].value);
-                    element.addEventListener(key.substring(4), func.bind(this));
+                    var func_name = element.attributes[idx].value;
+                    var func = eval(func_name);
+                    var binder = this;
+                    if (func_name.startsWith("self.app")) {
+                        binder = this.app;
+                    }
+
+                    element.addEventListener(key.substring(4), func.bind(binder));
                 }
                 catch {}
 

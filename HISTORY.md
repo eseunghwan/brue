@@ -30,3 +30,8 @@
 - support custom tags(starts with :) to brueElement objects
 - add javascripthon snippet scripts to script.js file
 - change "root" property from readonly to read-write
+
+<br><br>
+
+[ version 2021.12.08 ]
+- bug fixes
