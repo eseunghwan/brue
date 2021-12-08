@@ -339,7 +339,13 @@ class brueElement extends HTMLElement {
             },
             set(t, n, r) {
                 var res = Reflect.set(t, n, r);
-                self.$update();
+
+                if (self.app == undefined) {
+                    self.$update();
+                }
+                else {
+                    self.app.$update();
+                }
 
                 return res;
             }
