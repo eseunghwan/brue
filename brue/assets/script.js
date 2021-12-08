@@ -271,12 +271,12 @@ class brueElement extends HTMLElement {
             ev.target.root.$get_focus_address(ev.target);
         });
 
-        if (has_custom_attr) {
-            if (element.hasAttribute("ref")) {
-                this.refs[element.getAttribute("ref")] = element;
-                element.removeAttribute("ref");
-            }
+        if (element.hasAttribute("ref")) {
+            this.refs[element.getAttribute("ref")] = element;
+            element.removeAttribute("ref");
+        }
 
+        if (has_custom_attr) {
             this.$connect_event(element);
             this.$connect_model(element);
         }
