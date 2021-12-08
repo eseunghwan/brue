@@ -373,12 +373,13 @@ class brueElement extends HTMLElement {
         }
 
         this.shadowRoot.innerHTML += this.render();
+        var html_child = this.shadowRoot.children[this.shadowRoot.children.length - 1];
         for (var key in this.custom_tags) {
-            this.shadowRoot.children[1].setAttribute(key, this.custom_tags[key]);
+            html_child.setAttribute(key, this.custom_tags[key]);
             this.removeAttribute(key);
         }
 
-        this.$find_element_custom_attr(this.shadowRoot.children[1]);
+        this.$find_element_custom_attr(html_child);
 
         var focus_elm = this.shadowRoot;
         for (var address of this.$focus_address) {
