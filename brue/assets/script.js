@@ -187,7 +187,7 @@ class brueElement extends HTMLElement {
     }
 
     $as_property() {
-        return { "value": this, "enumerable": false, "configurable": false, "writable": false };
+        return { "value": this, "enumerable": false, "configurable": false, "writable": true };
     }
 
     $get_focus_address(element) {
