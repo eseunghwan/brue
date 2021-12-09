@@ -53,6 +53,6 @@ def transpile_directory(source_patterns:str, dest_dir:str, ext:str = "js", merge
 
     if merge_file is not None:
         with open(os.path.join(dest_dir, "script.js"), "a", encoding = "utf-8-sig") as sw:
-            sw.write("\n".join(texts))
+            sw.write("\n".join(texts) + "\n")
     else:
-        return "\n".join(texts)
+        return "\n".join(texts) + "\n"
