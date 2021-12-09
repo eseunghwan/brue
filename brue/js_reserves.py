@@ -8,6 +8,9 @@ class FileReader:
     def onchange(self):
         pass
 
+    def readAsText(self, source:str, encoding:str):
+        pass
+
 class JSON:
     def parse(self, source:str) -> dict:
         return {}
