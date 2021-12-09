@@ -5,7 +5,7 @@ class FileReader:
     def result(self) -> str:
         return ""
 
-    def onchange(self):
+    def onload(self):
         pass
 
     def readAsText(self, source:str, encoding:str):
