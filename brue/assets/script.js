@@ -2,6 +2,17 @@
 // javascripthon snippets
 var _pj;
 function _pj_snippets(container) {
+    function in_es6(left, right) {
+        if (((right instanceof Array) || ((typeof right) === "string"))) {
+            return (right.indexOf(left) > (- 1));
+        } else {
+            if (((right instanceof Map) || (right instanceof Set) || (right instanceof WeakMap) || (right instanceof WeakSet))) {
+                return right.has(left);
+            } else {
+                return (left in right);
+            }
+        }
+    }
     function set_class_decorators(cls, decos) {
         function reducer(val, deco) {
             return deco(val, cls);
@@ -23,6 +34,7 @@ function _pj_snippets(container) {
             }
         }
     }
+    container["in_es6"] = in_es6;
     container["set_class_decorators"] = set_class_decorators;
     container["set_properties"] = set_properties;
     return container;
