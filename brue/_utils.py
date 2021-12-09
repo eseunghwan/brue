@@ -8,7 +8,7 @@ def transpile(source:str, dest:str, remove_dest:bool = False, search_css:bool = 
         lines = []
         for line in rt.read().split("\n"):
             if remove_dest:
-                cond = not line.strip().startswith("import {") and not line.strip().startswith("//# sourceMappingURL")
+                cond = not line.strip().startswith("import {") and not line.strip().startswith("import *") and not line.strip().startswith("//# sourceMappingURL")
             else:
                 cond = not line.strip().startswith("//# sourceMappingURL")
 
