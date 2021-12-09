@@ -17,7 +17,7 @@ def transpile(source:str, dest:str, remove_dest:bool = False, search_css:bool = 
 
         rtt = "\n".join(lines).strip()
 
-    rtt = rtt.split("_pj_snippets(_pj);")[-1]
+    # rtt = rtt.split("_pj_snippets(_pj);")[-1]
 
     if search_css:
         try:
