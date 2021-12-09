@@ -36,3 +36,6 @@
 [ version 2021.12.08 ]
 - bug fixes
 - add javascript reserved-words
+
+[ version 2021.12.09 ]
+- continue to adding javascript reserved-words
