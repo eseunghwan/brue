@@ -123,7 +123,7 @@ def build_project(args):
     config = read_config()["build"]
 
     build_dir = config["target"] if args["target"] is None else args["target"]
-    build_project_raw(os.path.realpath(build_dir), True)
+    build_project_raw(os.path.realpath(build_dir), True, False)
 
 
 parser = argparse.ArgumentParser(
