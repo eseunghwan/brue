@@ -39,3 +39,8 @@
 
 [ version 2021.12.09 ]
 - continue to adding javascript reserved-words
+
+<br><br>
+
+[ version 2021.12.15 ]
+- add "--minify", "--minify-html", "--minify-js" flags to build options

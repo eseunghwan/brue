@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, sys, argparse, json, shutil, minify_html, jsmin, zipfile
+import os, sys, argparse, json, shutil, minify_html as htmlmin, jsmin, zipfile
 from glob import glob
 from ._utils import transpile_directory, transpile
 from . import __path__
@@ -22,7 +22,7 @@ def read_config() -> dict:
     return config
 
 # functions
-def build_project_raw(build_dir:str, verbose:bool, minify_output:bool = True):
+def build_project_raw(build_dir:str, verbose:bool, minify:bool = False, minify_html:bool = False, minify_js:bool = False):
     source_dir = os.getcwd()
     if os.path.exists(build_dir):
         shutil.rmtree(build_dir)
@@ -81,11 +81,17 @@ def build_project_raw(build_dir:str, verbose:bool, minify_output:bool = True):
     ifw = open(os.path.join(build_dir, "index.html"), "w", encoding = "utf-8-sig")
     sfw = open(os.path.join(build_dir, "script.js"), "w", encoding = "utf-8-sig")
 
-    if minify_output:
-        ifw.write(minify_html.minify(index_html, remove_processing_instructions = True))
-        sfw.write(jsmin.jsmin(script_text))
+    if minify:
+        minify_html, minify_js = True, True
+
+    if minify_html:
+        ifw.write(htmlmin.minify(index_html, remove_processing_instructions = True))
     else:
         ifw.write(index_html)
+
+    if minify_js:
+        sfw.write(jsmin.jsmin(script_text))
+    else:
         sfw.write(script_text)
 
     ifw.close()
@@ -123,7 +129,7 @@ def build_project(args):
     config = read_config()["build"]
 
     build_dir = config["target"] if args["target"] is None else args["target"]
-    build_project_raw(os.path.realpath(build_dir), True, False)
+    build_project_raw(os.path.realpath(build_dir), True, args["minify"], args["minify_html"], args["minify_js"])
 
 
 parser = argparse.ArgumentParser(
@@ -142,6 +148,9 @@ serve_parser.set_defaults(func = serve_project)
 
 build_parser = sparser.add_parser("build")
 build_parser.add_argument("--target", default = None)
+build_parser.add_argument("--minify", default = False, action = "store_true")
+build_parser.add_argument("--minify-html", default = False, action = "store_true")
+build_parser.add_argument("--minify-js", default = False, action = "store_true")
 build_parser.set_defaults(func = build_project)
 
 def run_cli():
