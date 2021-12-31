@@ -351,6 +351,29 @@ class brueElement extends HTMLElement {
         }
     }
 
+    $connect_status(element) {
+        var self = this;
+        for (var idx = 0; idx < element.attributes.length; idx++) {
+            var key = element.attributes[idx].name;
+            if ([":disabled", ":readonly"].includes(key)) {
+                var state = eval(element.attributes[idx].value);
+                element.removeAttribute(key);
+
+                if (state == true) {
+                    element.setAttribute(key.substring(1), "");
+                }
+            }
+            else if (key == ":visible") {
+                var visible = eval(element.attributes[idx].value);
+                element.removeAttribute(key);
+
+                if (visible == false) {
+                    element.style["display"] = "none";
+                }
+            }
+        }
+    }
+
     connectedCallback() {
         this.mounted();
 

@@ -44,3 +44,8 @@
 
 [ version 2021.12.15 ]
 - add "--minify", "--minify-html", "--minify-js" flags to build options
+
+<br><br>
+
+[ version 2021.12.31 ]
+- add ":disabled", ":readonly", ":visible" support
